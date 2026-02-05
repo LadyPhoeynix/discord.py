@@ -2180,6 +2180,7 @@ def describe(**parameters: Union[str, locale_str]) -> Callable[[T], T]:
     '''
 
     def decorator(inner: T) -> T:
+        inner = getattr(inner, '__discord_app_commands_unwrap__', inner) or inner  # type: ignore
         if isinstance(inner, Command):
             _populate_descriptions(inner._params, parameters)
         else:
@@ -2223,6 +2224,7 @@ def rename(**parameters: Union[str, locale_str]) -> Callable[[T], T]:
     """
 
     def decorator(inner: T) -> T:
+        inner = getattr(inner, '__discord_app_commands_unwrap__', inner) or inner  # type: ignore
         if isinstance(inner, Command):
             _populate_renames(inner._params, parameters)
         else:
@@ -2292,6 +2294,7 @@ def choices(**parameters: List[Choice[ChoiceT]]) -> Callable[[T], T]:
     """
 
     def decorator(inner: T) -> T:
+        inner = getattr(inner, '__discord_app_commands_unwrap__', inner) or inner  # type: ignore
         if isinstance(inner, Command):
             _populate_choices(inner._params, parameters)
         else:
@@ -2351,6 +2354,7 @@ def autocomplete(**parameters: AutocompleteCallback[GroupT, ChoiceT]) -> Callabl
     """
 
     def decorator(inner: T) -> T:
+        inner = getattr(inner, '__discord_app_commands_unwrap__', inner) or inner  # type: ignore
         if isinstance(inner, Command):
             _populate_autocomplete(inner._params, parameters)
         else:
@@ -2408,6 +2412,7 @@ def guilds(*guild_ids: Union[Snowflake, int]) -> Callable[[T], T]:
     defaults: List[int] = [g if isinstance(g, int) else g.id for g in guild_ids]
 
     def decorator(inner: T) -> T:
+        inner = getattr(inner, '__discord_app_commands_unwrap__', inner) or inner  # type: ignore
         if isinstance(inner, (Group, ContextMenu)):
             inner._guild_ids = defaults
         elif isinstance(inner, Command):
@@ -2470,6 +2475,7 @@ def check(predicate: Check) -> Callable[[T], T]:
     """
 
     def decorator(func: CheckInputParameter) -> CheckInputParameter:
+        func = getattr(func, '__discord_app_commands_unwrap__', func) or func  # type: ignore
         if isinstance(func, (Command, ContextMenu)):
             func.checks.append(predicate)
         else:
@@ -2513,6 +2519,7 @@ def guild_only(func: Optional[T] = None) -> Union[T, Callable[[T], T]]:
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             f.guild_only = True
             allowed_contexts = f.allowed_contexts or AppCommandContext()
@@ -2567,6 +2574,7 @@ def private_channel_only(func: Optional[T] = None) -> Union[T, Callable[[T], T]]
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             f.guild_only = False
             allowed_contexts = f.allowed_contexts or AppCommandContext()
@@ -2617,6 +2625,7 @@ def dm_only(func: Optional[T] = None) -> Union[T, Callable[[T], T]]:
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             f.guild_only = False
             allowed_contexts = f.allowed_contexts or AppCommandContext()
@@ -2658,6 +2667,7 @@ def allowed_contexts(guilds: bool = MISSING, dms: bool = MISSING, private_channe
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             f.guild_only = False
             allowed_contexts = f.allowed_contexts or AppCommandContext()
@@ -2709,6 +2719,7 @@ def guild_install(func: Optional[T] = None) -> Union[T, Callable[[T], T]]:
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             allowed_installs = f.allowed_installs or AppInstallationType()
             f.allowed_installs = allowed_installs
@@ -2757,6 +2768,7 @@ def user_install(func: Optional[T] = None) -> Union[T, Callable[[T], T]]:
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             allowed_installs = f.allowed_installs or AppInstallationType()
             f.allowed_installs = allowed_installs
@@ -2801,6 +2813,7 @@ def allowed_installs(
     """
 
     def inner(f: T) -> T:
+        f = getattr(f, '__discord_app_commands_unwrap__', f) or f  # type: ignore
         if isinstance(f, (Command, Group, ContextMenu)):
             allowed_installs = f.allowed_installs or AppInstallationType()
             f.allowed_installs = allowed_installs
@@ -2874,6 +2887,7 @@ def default_permissions(perms_obj: Optional[Permissions] = None, /, **perms: Unp
         permissions = Permissions(**perms)
 
     def decorator(func: T) -> T:
+        func = getattr(func, '__discord_app_commands_unwrap__', func) or func  # type: ignore
         if isinstance(func, (Command, Group, ContextMenu)):
             func.default_permissions = permissions
         else:
